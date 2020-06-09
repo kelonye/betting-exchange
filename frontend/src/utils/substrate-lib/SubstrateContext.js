@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
-import config from '../config';
+import config from 'config/polkadot';
 
 const parsedQuery = queryString.parse(window.location.search);
 const connectedSocket = parsedQuery.rpc || config.PROVIDER_SOCKET;
@@ -13,7 +13,7 @@ const INIT_STATE = {
   keyring: null,
   keyringState: null,
   api: null,
-  apiState: null
+  apiState: null,
 };
 
 const reducer = (state, action) => {
@@ -46,12 +46,13 @@ const reducer = (state, action) => {
 
 const SubstrateContext = React.createContext();
 
-const SubstrateContextProvider = (props) => {
+const SubstrateContextProvider = props => {
   // filtering props and merge with default param value
   const initState = { ...INIT_STATE };
   const neededPropNames = ['socket', 'types'];
   neededPropNames.forEach(key => {
-    initState[key] = (typeof props[key] === 'undefined' ? initState[key] : props[key]);
+    initState[key] =
+      typeof props[key] === 'undefined' ? initState[key] : props[key];
   });
   const [state, dispatch] = useReducer(reducer, initState);
 
@@ -65,7 +66,7 @@ const SubstrateContextProvider = (props) => {
 // prop typechecking
 SubstrateContextProvider.propTypes = {
   socket: PropTypes.string,
-  types: PropTypes.object
+  types: PropTypes.object,
 };
 
 export { SubstrateContext, SubstrateContextProvider };

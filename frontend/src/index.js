@@ -5,10 +5,10 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
-import store from 'store';
+import store from 'utils/store';
 import App from 'components/App';
 
-(async() => {
+(async () => {
   document.documentElement.classList.remove('anim-loading');
   document.getElementById('loader-container').remove();
   const root = document.createElement('div');

@@ -2,9 +2,9 @@
 
 ### Intro
 
-- A prediction market mvp built on [polkadot](https://polkadot.network/)
-- Presents a betting exchage UX similar to [betfair](https://www.betfair.com/exchange/plus/)
-- Demo at https://prediction-market.surge.sh
+- A prediction market mvp built on [Polkadot](https://polkadot.network/).
+- Presents a betting exchange UX similar to [Betfair](https://www.betfair.com/exchange/plus/).
+- Demo at https://prediction-market.surge.sh.
 
 ### Resources
 

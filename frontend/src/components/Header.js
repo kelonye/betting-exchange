@@ -27,16 +27,9 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Component({
-  toggleTheme,
-  isDark,
-  isLoggedIn,
-  activateWallet,
-  deactivateWallet,
-  accountId,
-  balance,
-}) {
+function Component({ toggleTheme, isDark, address, balance }) {
   const classes = useStyles();
+  const isLoggedIn = Boolean(address);
 
   return (
     <AppBar position="fixed" color="inherit">
@@ -51,13 +44,10 @@ function Component({
           {APP_TITLE}
         </Typography>
 
-        <Button
-          onClick={isLoggedIn ? deactivateWallet : activateWallet}
-          color="secondary"
-        >
+        <Button color="secondary">
           {isLoggedIn ? (
             <>
-              <div className={classes.account}>{accountId}</div>{' '}
+              <div className={classes.account}>{address}</div>{' '}
               <div className={classes.balance}>{balance}</div>{' '}
               <div>Sign Out</div>{' '}
             </>

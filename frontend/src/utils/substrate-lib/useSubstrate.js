@@ -3,7 +3,7 @@ import { ApiPromise, WsProvider } from '@polkadot/api';
 import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
 import keyring from '@polkadot/ui-keyring';
 
-import config from '../config';
+import config from 'config/polkadot';
 import { SubstrateContext } from './SubstrateContext';
 
 const useSubstrate = () => {
@@ -23,7 +23,7 @@ const useSubstrate = () => {
     _api.on('connected', () => {
       dispatch({ type: 'CONNECT', payload: _api });
       // `ready` event is not emitted upon reconnection. So we check explicitly here.
-      _api.isReady.then((_api) => dispatch({ type: 'CONNECT_SUCCESS' }));
+      _api.isReady.then(_api => dispatch({ type: 'CONNECT_SUCCESS' }));
     });
     _api.on('ready', () => dispatch({ type: 'CONNECT_SUCCESS' }));
     _api.on('error', () => dispatch({ type: 'CONNECT_ERROR' }));
@@ -38,10 +38,15 @@ const useSubstrate = () => {
     try {
       await web3Enable(config.APP_NAME);
       let allAccounts = await web3Accounts();
-      allAccounts = allAccounts.map(({ address, meta }) =>
-        ({ address, meta: { ...meta, name: `${meta.name} (${meta.source})` } }));
+      allAccounts = allAccounts.map(({ address, meta }) => ({
+        address,
+        meta: { ...meta, name: `${meta.name} (${meta.source})` },
+      }));
 
-      keyring.loadAll({ isDevelopment: config.DEVELOPMENT_KEYRING }, allAccounts);
+      keyring.loadAll(
+        { isDevelopment: config.DEVELOPMENT_KEYRING },
+        allAccounts
+      );
       dispatch({ type: 'SET_KEYRING', payload: keyring });
     } catch (e) {
       console.error(e);
