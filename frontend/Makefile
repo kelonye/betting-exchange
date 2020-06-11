@@ -1,11 +1,13 @@
 run: node_modules
-	@npm run start
+	@yarn start
 
 deploy:
-	@npm run build
-	@surge -d https://prediction-market.surge.sh -p build
+	@yarn build
+	@surge -d https://betting-exchange.surge.sh -p build
 
 node_modules:
 	@yarn
 
-.PHONY: deploy run
+.PHONY: \
+	run \
+	deploy

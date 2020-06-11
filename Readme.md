@@ -1,10 +1,10 @@
-![](https://prediction-market.surge.sh/shot.png)
+![](https://betting-exchange.surge.sh/shot.png)
 
-### Intro
+### 🚧 Work in Progress
 
 - A prediction market mvp built on [Polkadot](https://polkadot.network/).
 - Presents a betting exchange UX similar to [Betfair](https://www.betfair.com/exchange/plus/).
-- Demo at https://prediction-market.surge.sh.
+- Demo at https://betting-exchange.surge.sh.
 
 ### Resources
 

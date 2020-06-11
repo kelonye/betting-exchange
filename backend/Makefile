@@ -1,9 +1,14 @@
 run:
-	cargo build --release
-	./target/release/node-template --dev --ws-external
+	@./target/release/node-template --dev --ws-external
+
+build:
+	@cargo build --release
 
 purge:
-	rm -rf target
-	./target/release/node-template purge-chain --dev
+	@rm -rf target
+	@./target/release/node-template purge-chain --dev
 
-.PHONY: purge run
+.PHONY: \
+	run \
+	build \
+	purge

@@ -44,7 +44,7 @@ const reducer = (state, action) => {
   }
 };
 
-const SubstrateContext = React.createContext();
+const SubstrateContext = React.createContext([]);
 
 const SubstrateContextProvider = props => {
   // filtering props and merge with default param value

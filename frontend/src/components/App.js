@@ -18,13 +18,19 @@ const useStyles = makeStyles(theme => ({
 
 function Component({ error, isLoaded, theme, isDark }) {
   const classes = useStyles();
-
-  const [accountAddress, setAccountAddress] = React.useState(null);
-  // const { apiState, keyring, keyringState } = useSubstrate();
-  // const accountPair =
-  //   accountAddress &&
-  //   keyringState === 'READY' &&
-  //   keyring.getPair(accountAddress);
+  const { apiState, keyring, keyringState, loadAccounts } = useSubstrate();
+  let address, accountPair;
+  if (keyring) {
+    const keyringOptions = keyring.getPairs().map(account => ({
+      key: account.address,
+      value: account.address,
+      text: account.meta.name.toUpperCase(),
+      icon: 'user',
+    }));
+    address = keyringOptions.length > 0 ? keyringOptions[0].value : '';
+    accountPair =
+      address && keyringState === 'READY' && keyring.getPair(address);
+  }
 
   React.useEffect(() => {
     const root = document.documentElement;
@@ -34,8 +40,8 @@ function Component({ error, isLoaded, theme, isDark }) {
     }
   }, [isDark]);
 
-  // if (apiState === 'ERROR') error = 'Error connecting to the blockchain';
-  // else if (apiState !== 'READY') error = 'Connecting to the blockchain';
+  if (apiState === 'ERROR') error = 'Error connecting to the blockchain';
+  else if (apiState !== 'READY') error = 'Connecting to the blockchain...';
   // if (keyringState !== 'READY') {
   //   error = "Loading accounts (please review any extension's authorization)";
   // }
@@ -46,7 +52,7 @@ function Component({ error, isLoaded, theme, isDark }) {
   } else if (isLoaded) {
     pane = (
       <div className="flex-grow">
-        <Header address={accountAddress} />
+        <Header address={address} loadAccounts={loadAccounts} />
         <Switch>
           <Route path={'/'} component={Home} />
         </Switch>
@@ -56,18 +62,16 @@ function Component({ error, isLoaded, theme, isDark }) {
     pane = <Loader fullscreen />;
   }
   return (
-    <SubstrateContextProvider>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Router {...{ history }}>
-          <div className={classes.container}>{pane}</div>
-        </Router>
-      </ThemeProvider>
-    </SubstrateContextProvider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router {...{ history }}>
+        <div className={classes.container}>{pane}</div>
+      </Router>
+    </ThemeProvider>
   );
 }
 
-export default connect(state => {
+const Main = connect(state => {
   const { app } = state;
   const { isLoaded, error } = app;
   let err;
@@ -83,3 +87,11 @@ export default connect(state => {
     isDark: isDarkSelector(state),
   };
 }, mapDispatchToProps)(Component);
+
+export default function App() {
+  return (
+    <SubstrateContextProvider>
+      <Main />
+    </SubstrateContextProvider>
+  );
+}

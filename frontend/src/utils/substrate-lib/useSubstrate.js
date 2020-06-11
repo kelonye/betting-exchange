@@ -62,7 +62,7 @@ const useSubstrate = () => {
     loadAccounts();
   }, [loadAccounts]);
 
-  return { ...state, dispatch };
+  return { ...state, dispatch, loadAccounts };
 };
 
 export default useSubstrate;

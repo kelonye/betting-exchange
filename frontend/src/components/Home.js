@@ -3,7 +3,18 @@ import { connect } from 'react-redux';
 import * as mapDispatchToProps from 'actions';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import { Paper, IconButton } from '@material-ui/core';
+import {
+  Paper,
+  IconButton,
+  Tabs,
+  Tab,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import moment from 'moment';
@@ -76,13 +87,29 @@ const useStyles = makeStyles(theme => ({
   },
   headingCellBack: {},
   headingCellLay: {},
+  tabs: {
+    marginTop: 10,
+  },
+  activeTabContent: {
+    padding: 20,
+    width: '100%',
+  },
+  profit: {
+    fontSize: 10,
+    color: LAY_COLOR,
+  },
+  profitPositive: {
+    color: '#70fd8f',
+  },
 }));
 
 function Component({}) {
   const classes = useStyles();
+  const [activeTab, setActiveTab] = React.useState(0);
   const [day, setDay] = React.useState(moment());
   const backs = [1, 2, 3];
   const lays = [4, 5, 6];
+  const bets = [{ name: 'BTC', odds: 2.74, stake: 100, profit: 174 }];
 
   return (
     <div className={clsx('flex flex--justify-center', classes.container)}>
@@ -178,10 +205,18 @@ function Component({}) {
                   className={clsx(
                     classes.rowHeading,
                     'flex',
-                    'flex--align-center'
+                    'flex--align-center',
+                    'flex--column'
                   )}
                 >
-                  {coin}
+                  <div>{coin}</div>
+                  <div
+                    className={clsx(classes.profit, {
+                      [classes.profitPositive]: coin === 'BTC',
+                    })}
+                  >
+                    {coin === 'BTC' ? '+$174' : '-$174'}
+                  </div>
                 </div>
                 <div className="flex">
                   {backs.map((back, i) => (
@@ -221,6 +256,47 @@ function Component({}) {
                 </div>
               </div>
             ))}
+
+            <Tabs
+              indicatorColor="secondary"
+              textColor="inherit"
+              aria-label="bet types"
+              className={clsx(classes.tabs)}
+              value={activeTab}
+              onChange={(e, tab) => setActiveTab(tab)}
+            >
+              <Tab label={'Open Bets'} />
+              <Tab label={'Unmatched Bets'} />
+            </Tabs>
+
+            <div
+              className={clsx(classes.activeTabContent, 'flex', 'flex--grow')}
+            >
+              <TableContainer>
+                <Table className={classes.table} size="small" aria-label="bets">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Bet</TableCell>
+                      <TableCell align="right">Odds</TableCell>
+                      <TableCell align="right">Stake</TableCell>
+                      <TableCell align="right">Profit</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {bets.map(row => (
+                      <TableRow key={row.name}>
+                        <TableCell component="th" scope="row">
+                          {row.name}
+                        </TableCell>
+                        <TableCell align="right">{row.odds}</TableCell>
+                        <TableCell align="right">${row.stake}</TableCell>
+                        <TableCell align="right">${row.profit}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
           </div>
         </div>
       </Paper>

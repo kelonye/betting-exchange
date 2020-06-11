@@ -18,16 +18,20 @@ import { APP_TITLE } from 'config';
 
 const useStyles = makeStyles(theme => ({
   account: {
-    color: 'white',
     marginRight: 10,
   },
   balance: {
-    color: 'white',
     marginRight: 10,
   },
 }));
 
-function Component({ toggleTheme, isDark, address, balance }) {
+function Component({
+  toggleTheme,
+  isDark,
+  address,
+  balance = 1990,
+  loadAccounts,
+}) {
   const classes = useStyles();
   const isLoggedIn = Boolean(address);
 
@@ -44,17 +48,19 @@ function Component({ toggleTheme, isDark, address, balance }) {
           {APP_TITLE}
         </Typography>
 
-        <Button color="secondary">
-          {isLoggedIn ? (
-            <>
-              <div className={classes.account}>{address}</div>{' '}
-              <div className={classes.balance}>{balance}</div>{' '}
-              <div>Sign Out</div>{' '}
-            </>
-          ) : (
-            <div>Connect Polkadot Account</div>
-          )}
-        </Button>
+        {isLoggedIn ? (
+          <>
+            <div className={classes.account}>{address}</div>
+            <div className={classes.balance}>(${balance})</div>
+            <Button color="secondary" onClick={loadAccounts}>
+              Sign Out
+            </Button>
+          </>
+        ) : (
+          <Button color="secondary" onClick={loadAccounts}>
+            Connect Polkadot Account
+          </Button>
+        )}
 
         <Tooltip title="Toggle light/dark theme">
           <IconButton
